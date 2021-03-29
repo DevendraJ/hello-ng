@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef, AfterContentInit, Injectable } from '@angular/core';
 import * as BpmnJS from 'bpmn-js/dist/bpmn-modeler.production.min.js'
+import BpmnModeler from 'bpmn-js/lib/Modeler';
+import propertiesPanelModule from 'bpmn-js-properties-panel';
+import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import { from, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -12,30 +15,29 @@ import { map, switchMap } from 'rxjs/operators';
 @Injectable()
 export class DrawComponent implements AfterContentInit {
   private bpmnJS: BpmnJS;
-  private diagramUrl:string = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+  private diagramUrl: string = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
 
-  constructor(private http: HttpClient) {
-    this.bpmnJS = new BpmnJS();
-
-    this.bpmnJS.on('import.done', ({ error }) => {
-      if (!error) {
-        this.bpmnJS.get('canvas').zoom('fit-viewport');
-      }
-    });
-  }
+  constructor(private http: HttpClient) {  }
 
   ngAfterContentInit(): void {
+    this.bpmnJS = new BpmnModeler({
+      container: '#canvas',
+      propertiesPanel: {
+        parent: '#properties-panel'
+      },
+      additionalModules: [
+        propertiesPanelModule,
+        propertiesProviderModule,
+      ],
+    });
+
     this.loadUrl(this.diagramUrl);
-    this.bpmnJS.attachTo('#canvas');
   }
 
   ngOnDestroy(): void {
-    this.bpmnJS.destroy();
+    // this.bpmnJS.destroy();
   }
 
-  /**
-   * Load diagram from URL and emit completion event
-   */
   loadUrl(url: string): Subscription {
 
     return (
@@ -44,23 +46,17 @@ export class DrawComponent implements AfterContentInit {
         map(result => result.warnings),
       ).subscribe(
         (warnings) => {
-          
+
         },
         (err) => {
-         
+
         }
       )
     );
   }
 
-  /**
-   * Creates a Promise to import the given XML into the current
-   * BpmnJS instance, then returns it as an Observable.
-   *
-   * @see https://github.com/bpmn-io/bpmn-js-callbacks-to-promises#importxml
-   */
-  private importDiagram(xml: string): Observable<{warnings: Array<any>}> {
-    return from(this.bpmnJS.importXML(xml) as Promise<{warnings: Array<any>}>);
+  private importDiagram(xml: string): Observable<{ warnings: Array<any> }> {
+    return from(this.bpmnJS.importXML(xml) as Promise<{ warnings: Array<any> }>);
   }
 
 }
