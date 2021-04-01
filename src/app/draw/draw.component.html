@@ -1,2 +1,21 @@
-<div id="canvas" class="canvas"></div>
-<div id="properties-panel" class="properties-panel-parent"></div>
+<div fxLayout="row" fxLayoutAlign="space-between stretch" style="height: 90%">
+  <div id="canvas" class="canvas" fxFlex="80"></div>
+  <div fxFlex="20" class="property-panel">
+    <div
+      fxLayout="row"
+      id="properties-panel"
+      class="properties-panel-parent"
+      style="height: 90%"
+    ></div>
+    <div fxLayout="row" class="export-action-btn">
+      <button
+        mat-flat-button
+        color="primary"
+        class="btn btn-primary"
+        (click)="downloadDiagram()"
+      >
+        Export as File
+      </button>
+    </div>
+  </div>
+</div>

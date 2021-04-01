@@ -6,6 +6,7 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import { from, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import CustomProviders from '../custom';
 
 @Component({
   selector: 'app-draw',
@@ -15,9 +16,12 @@ import { map, switchMap } from 'rxjs/operators';
 @Injectable()
 export class DrawComponent implements AfterContentInit {
   private bpmnJS: BpmnJS;
-  private diagramUrl: string = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+  // private diagramUrl: string = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+  private diagramUrl: string = '/assets/diagram.bpmn';
 
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient) {
+
+  }
 
   ngAfterContentInit(): void {
     this.bpmnJS = new BpmnModeler({
@@ -28,6 +32,7 @@ export class DrawComponent implements AfterContentInit {
       additionalModules: [
         propertiesPanelModule,
         propertiesProviderModule,
+        CustomProviders,
       ],
     });
 
@@ -57,6 +62,17 @@ export class DrawComponent implements AfterContentInit {
 
   private importDiagram(xml: string): Observable<{ warnings: Array<any> }> {
     return from(this.bpmnJS.importXML(xml) as Promise<{ warnings: Array<any> }>);
+  }
+
+  public async downloadDiagram() {
+    try {
+      const { xml } = await this.bpmnJS.saveXML({ format: true });
+      const blob = new Blob([xml], { type: 'application/bpmn20-xml;charset=UTF-8,' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    } catch (err) {
+      console.error('Error happened saving XML: ', err);
+    }
   }
 
 }

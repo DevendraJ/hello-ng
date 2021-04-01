@@ -37,13 +37,13 @@ a:link {
   font-size: 12px;
   margin: 20px auto;
   text-align: left;
-  color: #BD2828;
+  color: #bd2828;
 }
 .content > .message.error pre {
-  border: solid 1px #BD2828;
+  border: solid 1px #bd2828;
   background: #fefafa;
   padding: 10px;
-  color: #BD2828;
+  color: #bd2828;
 }
 .content:not(.with-error) .error,
 .content.with-error .intro,
@@ -74,7 +74,7 @@ a:link {
   margin-right: 10px;
 }
 .buttons > li > a {
-  background: #DDD;
+  background: #ddd;
   border: solid 1px #666;
   display: inline-block;
   padding: 5px;
@@ -83,7 +83,7 @@ a:link {
   opacity: 0.3;
 }
 .buttons a.active {
-  opacity: 1.0;
+  opacity: 1;
 }
 .properties-panel-parent {
   border-left: 1px solid #ccc;
@@ -95,4 +95,15 @@ a:link {
 .properties-panel-parent > .djs-properties-panel {
   padding-bottom: 70px;
   min-height: 100%;
+}
+
+.properties-panel-parent,
+.canvas,
+.export-action-btn {
+  margin: 15px;
+  background-color: #f2f2f2;
+}
+
+.export-action-btn {
+  height: 45px;
 }

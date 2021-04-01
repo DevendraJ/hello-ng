@@ -6,17 +6,16 @@ import { AppComponent } from './app.component';
 import { DrawComponent } from './draw/draw.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
-  declarations: [
-    AppComponent,
-    DrawComponent
-  ],
+  declarations: [AppComponent, DrawComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FlexLayoutModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
