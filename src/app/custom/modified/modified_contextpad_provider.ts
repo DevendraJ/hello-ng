@@ -21,7 +21,6 @@ export default class ModifiedContextPadProvider {
         private elementFactory, private injector, private translate,
         private modeling, private rules
     ) {
-
         if (config.autoPlace !== false) {
             this.autoPlace = injector.get('autoPlace', false);
         }
@@ -29,21 +28,24 @@ export default class ModifiedContextPadProvider {
     }
 
     appendAction(type, className, title, options) {
+        let elementFactory = this.elementFactory;
+        let autoPlace = this.autoPlace;
+
         if (typeof title !== 'string') {
             // options = title;
             title = this.translate('Append {type}', { type: type.replace(/^bpmn:/, '') });
         }
 
         function appendStart(event, element) {
-            let shape = this.elementFactory.createShape(assign({ type: type }, options));
+            let shape = elementFactory.createShape(assign({ type: type }, options));
             this.create.start(event, shape, {
                 source: element
             });
         }
 
-        let append = this.autoPlace ? function (event, element) {
-            let shape = this.elementFactory.createShape(assign({ type: type }, options));
-            this.autoPlace.append(element, shape);
+        let append = autoPlace ? function (event, element) {
+            let shape = elementFactory.createShape(assign({ type: type }, options));
+            autoPlace.append(element, shape);
         } : appendStart;
 
         return {
@@ -59,6 +61,7 @@ export default class ModifiedContextPadProvider {
 
     getContextPadEntries(element) {
         let actions = {};
+        let modeling = this.modeling;
 
         if (element.type === 'label') {
             return {};
@@ -76,10 +79,6 @@ export default class ModifiedContextPadProvider {
             });
         }
 
-        function removeElement(e) {
-            this.modeling.removeElements([element]);
-        }
-
         let deleteAllowed = this.rules.allowed('elements.delete', { elements: [element] });
         if (deleteAllowed) {
             assign(actions, {
@@ -88,7 +87,9 @@ export default class ModifiedContextPadProvider {
                     className: 'bpmn-icon-trash',
                     title: this.translate('Remove'),
                     action: {
-                        click: removeElement
+                        click: function (e) {
+                            modeling.removeElements([element]);
+                        }
                     }
                 }
             });
