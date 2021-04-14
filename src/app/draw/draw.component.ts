@@ -6,7 +6,7 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import { from, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import CustomProviders from '../custom';
+import ModifiedContextpadProvider from '../custom/modified/modified_contextpad_provider';
 
 @Component({
   selector: 'app-draw',
@@ -32,7 +32,7 @@ export class DrawComponent implements AfterContentInit {
       additionalModules: [
         propertiesPanelModule,
         propertiesProviderModule,
-        CustomProviders,
+        { 'contextPadProvider': ['type', ModifiedContextpadProvider] },
       ],
     });
 
