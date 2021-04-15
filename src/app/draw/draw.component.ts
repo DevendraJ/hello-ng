@@ -6,7 +6,6 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import { from, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import ModifiedContextpadProvider from '../custom/modified/modified_contextpad_provider';
 import CustomContextpadProvider from '../custom/custom_contextpad_provider';
 
 @Component({
@@ -35,10 +34,8 @@ export class DrawComponent implements AfterContentInit {
         propertiesProviderModule,
 
         // Removed a few existing entries from the original Contextpad Provider
-        { contextPadProvider: ['type', ModifiedContextpadProvider] },
-
         // Added entries into a custom Contextpad Provider
-        {  
+        {
           __init__: ['customContextpadProvider'],
           customContextpadProvider: ['type', CustomContextpadProvider]
         },
