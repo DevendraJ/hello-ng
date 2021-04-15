@@ -11,7 +11,6 @@ export default class CustomContextpadProvider implements ContextpadProviderInter
     ];
 
     constructor(private contextPad, private translate, private connect) {
-
         contextPad.registerProvider(this);
     }
 
